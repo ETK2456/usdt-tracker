@@ -1,0 +1,21 @@
+name: Update Portfolio
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests
+      - run: python holdings.py
+      - run: |
+          git config user.name "ETK2456"
+          git config user.email "ETK2456@users.noreply.github.com"
+          git add .
+          git diff --quiet --cached || git commit -m "auto update"
+          git push
